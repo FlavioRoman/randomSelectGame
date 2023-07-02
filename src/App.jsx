@@ -52,7 +52,7 @@ function App() {
 
   const select = (index) => {
     const newArr = [...item];
-    if (newArr[index].item == "📀") {
+    if (newArr[index].item == "🟢") {
       setWinner(true);
       newArr.map((value) => (value.show = false));
       setItem(newArr);
