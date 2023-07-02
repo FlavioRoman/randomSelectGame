@@ -2,6 +2,7 @@ import { useState } from "react";
 import { square } from "./utils/data";
 import { motion } from "framer-motion";
 import { container, element } from "./utils/animation";
+import Confetti from "react-confetti";
 import "./App.css";
 
 export const Modal = ({ reset }) => {
@@ -11,9 +12,10 @@ export const Modal = ({ reset }) => {
       animate={{ opacity: 1 }}
       className="bg-[#25252590] flex items-center justify-center absolute top-0 left-0 right-0 bottom-0 w-full h-full p-2 z-10"
     >
+      <Confetti className="w-full h-full" />
       <article className="bg-[#252525] flex items-center rounded-lg justify-center flex-col w-[500px] max-w-[500px] h-[300px]">
         <h1 className="text-slate-100 text-center text-[1.5rem]">
-          Felicidades a ganado!
+          FELICIDADES HAS GANADO!
         </h1>
         <h2 className="text-center text-[80px]">🏆</h2>
         <button
@@ -44,6 +46,7 @@ export const Square = ({ value, index, select }) => {
 };
 
 function App() {
+  const [hide, setHide] = useState(false);
   const [item, setItem] = useState(square);
   const [winner, setWinner] = useState(false);
 
@@ -57,6 +60,13 @@ function App() {
     }
     newArr[index].show = false;
     setItem(newArr);
+    setHide(check(newArr));
+  };
+
+  const check = (arr) => {
+    return arr.some((value) => {
+      return value.show == false;
+    });
   };
 
   const reset = () => {
@@ -65,6 +75,7 @@ function App() {
     const newArr = [...item];
     newArr.map((value) => (value.show = true));
     setItem(newArr);
+    setHide(false);
   };
 
   const random = () => {
@@ -76,6 +87,7 @@ function App() {
     <main>
       {winner && <Modal reset={reset} />}
       <motion.section initial="hidden" animate="visible" variants={container}>
+        <h1 className="text-center font-light text-4xl">RANDOM SELECT</h1>
         <article className="flex flex-wrap justify-center sm:grid sm:grid-cols-5 mt-6 ">
           {item?.map((value, index) => (
             <Square key={index} index={index} value={value} select={select} />
@@ -84,7 +96,9 @@ function App() {
         <button
           type="button"
           onClick={() => random()}
-          className="border-[#252525] border-solid border-2 rounded-lg font-semibold block mx-auto mt-4 p-2"
+          className={`border-[#252525] border-solid border-2 rounded-lg font-semibold block mx-auto mt-4 p-2 ${
+            hide ? "hidden" : "visible"
+          }`}
         >
           MEZCLAR
         </button>
