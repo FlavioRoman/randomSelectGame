@@ -96,8 +96,10 @@ function App() {
         <button
           type="button"
           onClick={() => random()}
-          className={`border-[#252525] border-solid border-2 rounded-lg font-semibold block mx-auto mt-4 p-2 ${
-            hide ? "hidden" : "visible"
+          className={`border-[#252525] border-solid border-2 rounded-lg font-semibold block transition-all mx-auto mt-4 p-2 hover:bg-[#252525] hover:text-slate-100 ${
+            hide
+              ? "border-[#25252550] text-[#25252550] pointer-events-none"
+              : ""
           }`}
         >
           MEZCLAR
