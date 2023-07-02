@@ -10,7 +10,7 @@ export const Modal = ({ reset }) => {
     <motion.section
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="bg-[#25252590] flex items-center justify-center absolute top-0 left-0 right-0 bottom-0 w-full h-full p-2 z-10"
+      className="bg-[#25252590] flex items-center justify-center fixed top-0 left-0 right-0 bottom-0 w-full h-full z-10"
     >
       <Confetti className="w-full h-full" />
       <article className="bg-[#252525] flex items-center rounded-lg justify-center flex-col w-[500px] max-w-[500px] h-[300px]">
