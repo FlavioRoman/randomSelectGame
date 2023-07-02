@@ -15,6 +15,7 @@ export const Modal = ({ reset }) => {
         <h1 className="text-slate-100 text-center text-[1.5rem]">
           Felicidades a ganado!
         </h1>
+        <h2 className="text-center text-[80px]">🏆</h2>
         <button
           type="button"
           onClick={() => reset()}
@@ -75,8 +76,7 @@ function App() {
     <main>
       {winner && <Modal reset={reset} />}
       <motion.section initial="hidden" animate="visible" variants={container}>
-        <h1 className="text-center font-bold text-4xl">RANDOM SELECT</h1>
-        <article className="grid grid-cols-5 mt-6">
+        <article className="flex flex-wrap justify-center sm:grid sm:grid-cols-5 mt-6 ">
           {item?.map((value, index) => (
             <Square key={index} index={index} value={value} select={select} />
           ))}
