@@ -35,7 +35,7 @@ export const Square = ({ value, index, select }) => {
       onClick={() => select(index)}
       className={`${
         value.show ? `bg-gray-900` : ``
-      } border-[#252525] drop-shadow-lg border-solid border-2 cursor-pointer flex justify-center items-center transition-all m-[2px] w-[70px] h-[70px]`}
+      } border-[#252525] drop-shadow-lg border-solid border-2 cursor-pointer flex justify-center items-center flex-wrap transition-all m-[2px] w-[70px] h-[70px]`}
     >
       <span>{value.show ? "" : value.item}</span>
     </motion.div>
