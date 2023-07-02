@@ -96,10 +96,10 @@ function App() {
         <button
           type="button"
           onClick={() => random()}
-          className={`border-[#252525] border-solid border-2 rounded-lg font-semibold block transition-all mx-auto mt-4 p-2 hover:bg-[#252525] hover:text-slate-100 ${
+          className={`rounded-lg font-semibold block mx-auto transition-all mt-4 p-[12px] ${
             hide
-              ? "border-[#25252550] text-[#25252550] pointer-events-none"
-              : ""
+              ? `bg-slate-100 text-slate-500 pointer-events-none`
+              : `bg-slate-900 text-slate-100`
           }`}
         >
           MEZCLAR
