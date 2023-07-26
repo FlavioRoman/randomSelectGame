@@ -21,7 +21,7 @@ export const Credito = ({ setOpen, credit }) => {
         <h1 className="text-slate-100 text-center text-[1.5rem]">
           CREDITO ACTUAL
         </h1>
-        <h2 className="text-center  text-[80px]">🎫</h2>
+        <h2 className="text-center  text-[80px]">💵</h2>
         <h2 className="text-center tracking-widest text-slate-100 text-[2.5rem]">
           {credit}
         </h2>
