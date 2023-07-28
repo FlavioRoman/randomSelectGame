@@ -5,13 +5,15 @@ const shadowStyleOn = {
                  0 0 30px #FF3131`,
 };
 
-export const Finish = ({ setOpen, reset }) => {
+export const Finish = ({ setCredit, setOpen, reset }) => {
   const startAgain = () => {
     reset();
+    setCredit(300);
     setOpen((state) => ({ ...state, finish: false }));
   };
   const exit = () => {
     reset();
+    setCredit(300);
     setOpen((state) => ({ ...state, finish: false }));
   };
   return (

@@ -133,7 +133,7 @@ function App() {
   // ::::::HOOK useEffect::::::
   useEffect(() => {
     random();
-    if (credit < 0) {
+    if (credit <= 0) {
       setOpen((state) => ({ ...state, lose: false, finish: true }));
     }
   }, [open.credit, open.lose]);
@@ -155,13 +155,16 @@ function App() {
       {/* ::::::MODALS:::::: */}
       {open.lose && (
         <Lose
+          open={open}
           reset={reset}
           credit={credit}
           setOpen={setOpen}
           setCredit={setCredit}
         />
       )}
-      {open.finish && <Finish setOpen={setOpen} reset={reset} />}
+      {open.finish && (
+        <Finish setCredit={setCredit} setOpen={setOpen} reset={reset} />
+      )}
       {open.winner && <Modal reset={reset} description={description} />}
     </main>
   );

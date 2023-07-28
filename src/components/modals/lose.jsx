@@ -9,7 +9,7 @@ export const Lose = ({ setOpen, credit, setCredit, reset }) => {
   // ::::::FUNCION PROBAR DE NUEVO::::::
   const tryAgain = () => {
     reset();
-    setCredit((state) => state - 100);
+    if (!open.finish) setCredit((state) => state - 100);
     setOpen((state) => ({ ...state, lose: false }));
   };
   // ::::::FUNCION CANCELAR::::::
