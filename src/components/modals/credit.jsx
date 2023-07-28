@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { useEffect } from "react";
 
 const shadowStyleOn = {
   color: " #fff",
@@ -7,7 +8,10 @@ const shadowStyleOn = {
                  0 0 30px #FF3131`,
 };
 
-export const Credito = ({ setOpen, credit }) => {
+export const Credit = ({ setOpen, credit }) => {
+  useEffect(() => {
+    console.log("MI CREDITO: ", credit);
+  }, []);
   return (
     <motion.section
       initial={{ opacity: 0 }}
@@ -21,14 +25,13 @@ export const Credito = ({ setOpen, credit }) => {
         <h1 className="text-slate-100 text-center text-[1.5rem]">
           CREDITO ACTUAL
         </h1>
-        <h2 className="text-center  text-[80px]">💵</h2>
         <h2 className="text-center tracking-widest text-slate-100 text-[2.5rem]">
           {credit}
         </h2>
         <button
           type="button"
-          onClick={() => setOpen(false)}
-          className="border-slate-100 text-slate-100 border-solid border-2 rounded-lg font-semibold block mx-auto mt-4 p-2 transition-all hover:bg-slate-100 hover:text-slate-900"
+          onClick={() => setOpen((state) => ({ ...state, credit: false }))}
+          className="border-slate-100 text-slate-100 w-[150px] border-solid border-2 rounded-lg font-semibold block mx-auto mt-4 p-2 transition-all hover:bg-slate-100 hover:text-slate-900"
         >
           SALIR
         </button>
