@@ -1,7 +1,7 @@
 export const square = [
-  { show: true, item: "🍸", text: "Coctel" },
-  { show: true, item: "🥃", text: "Whisky" },
-  { show: true, item: "🍺", text: "Cerveza" },
+  { show: true, item: "🍸" },
+  { show: true, item: "🥃" },
+  { show: true, item: "🍺" },
   { show: true, item: "⚪" },
   { show: true, item: "⚪" },
   { show: true, item: "⚪" },

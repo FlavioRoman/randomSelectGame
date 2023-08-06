@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import { useEffect } from "react";
 
 const shadowStyleOn = {
   color: " #fff",
@@ -8,7 +7,7 @@ const shadowStyleOn = {
                  0 0 30px #FF3131`,
 };
 
-export const Credit = ({ credit, resetAll }) => {
+export const Credit = ({ resetAll, bigWinner }) => {
   return (
     <motion.section
       initial={{ opacity: 0 }}
@@ -22,12 +21,9 @@ export const Credit = ({ credit, resetAll }) => {
         <h1 className="text-slate-100 text-center text-[1.5rem]">
           TE HAS QUEDADO SIN CREDITOS
         </h1>
-        <h2 className="text-center tracking-widest text-slate-100 text-[2.5rem]">
-          {credit}
-        </h2>
         <button
           type="button"
-          onClick={() => resetAll()}
+          onClick={() => resetAll(bigWinner)}
           className="border-slate-100 text-slate-100 w-[150px] border-solid border-2 rounded-lg font-semibold block mx-auto mt-4 p-2 transition-all hover:bg-slate-100 hover:text-slate-900"
         >
           SALIR

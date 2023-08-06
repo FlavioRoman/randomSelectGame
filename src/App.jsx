@@ -1,9 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { square, square_ } from "./utils/data";
 import Confetti from "react-confetti";
 import "./App.css";
-import { Lose } from "./components/modals/lose";
-import { Finish } from "./components/modals/finish";
 import BarCredit from "./components/Bar/barCredit";
 import { useSpring, animated } from "@react-spring/web";
 import { Participate } from "./components/modals/participate";
@@ -23,13 +21,7 @@ const shadowStyleOff = {
                0 0 1px #4784F1`,
 };
 
-export const Modal = ({
-  reset,
-  bigWinner,
-  resetSquare,
-  description,
-  resetAll,
-}) => {
+export const Modal = ({ description, resetAll, bigWinner }) => {
   return (
     <section className="bg-[#25252590] flex items-center justify-center fixed top-0 left-0 right-0 bottom-0 w-full h-full z-10 p-2">
       <Confetti className="w-full h-full" />
@@ -44,21 +36,9 @@ export const Modal = ({
         <h2 className="text-center text-slate-100 text-[1.5rem]">
           {description.description}
         </h2>
-        {bigWinner ? (
-          ""
-        ) : (
-          <button
-            type="button"
-            onClick={() => resetSquare()}
-            className="border-slate-100 text-slate-100 border-solid border-2 rounded-lg font-semibold block mx-auto mt-4 p-2 transition-all hover:bg-slate-100 hover:text-slate-900"
-          >
-            Reiniciar
-          </button>
-        )}
-
         <button
           type="button"
-          onClick={() => resetAll()}
+          onClick={() => resetAll(bigWinner)}
           className="border-slate-100 text-slate-100 border-solid border-2 rounded-lg font-semibold block mx-auto mt-4 p-2 transition-all hover:bg-slate-100 hover:text-slate-900"
         >
           Finalizar
@@ -68,8 +48,7 @@ export const Modal = ({
   );
 };
 
-export const Square = ({ winner, value, index, select }) => {
-  console.log(winner);
+export const Square = ({ index, value, select }) => {
   const springs = useSpring({
     from: { opacity: 0 },
     to: { opacity: 1 },
@@ -88,17 +67,15 @@ export const Square = ({ winner, value, index, select }) => {
         className="text-[1.2rem]  text-center"
         style={value.show ? shadowStyleOn : shadowStyleOff}
       >
-        {winner ? value.item : "BET BAR 360"}
+        {value.show ? "BET BAR 360" : value.item}
       </span>
     </animated.div>
   );
 };
 
 function App() {
-  const [credit, setCredit] = useState(300);
+  const [credit, setCredit] = useState(500);
   const [winner, setWinner] = useState(false);
-  const [item01, setItem01] = useState(square);
-  const [item02, setItem02] = useState(square_);
   const [bigWinner, setBigWinner] = useState(false);
   const [participate, setParticipate] = useState(false);
   const [description, setDescription] = useState({
@@ -108,7 +85,8 @@ function App() {
   });
 
   const selectSquare = (index) => {
-    const newArr = bigWinner ? [...item02] : [...item01];
+    let newArr = bigWinner ? [...square_] : [...square];
+    newArr[index].show = false;
     if (bigWinner) {
       if (newArr[index].item == "100.000") {
         setWinner(true);
@@ -118,6 +96,9 @@ function App() {
           title: "FELICIDADES HAS GANADO!",
           description: "",
         }));
+        for (let i = 0; i < newArr.length; i++) {
+          newArr[i].show = true;
+        }
       } else {
         setCredit((state) => state - 100);
       }
@@ -134,24 +115,26 @@ function App() {
           title: "FELICIDADES HAS GANADO!",
           description: "",
         }));
+        for (let i = 0; i < newArr.length; i++) {
+          newArr[i].show = true;
+        }
       } else {
         setCredit((state) => state - 100);
       }
     }
-  };
 
-  const resetSquare = () => {
-    setWinner(false);
-    setDescription({
-      item: "",
-      title: "",
-      description: "",
-    });
-    setParticipate(true);
+    // ::::::REINICIAR LOS SQUARES::::::
+    if (credit == 100) {
+      for (let i = 0; i < newArr.length; i++) {
+        newArr[i].show = true;
+      }
+    }
   };
 
   const resetParticipate = () => {
+    setCredit(500);
     setWinner(false);
+    setBigWinner(true);
     setParticipate(false);
     setDescription({
       item: "",
@@ -161,7 +144,10 @@ function App() {
   };
 
   const reset = () => {
+    setCredit(500);
     setWinner(false);
+    setBigWinner(false);
+    setParticipate(false);
     setDescription({
       item: "",
       title: "",
@@ -169,11 +155,14 @@ function App() {
     });
   };
 
-  const resetAll = () => {
+  const resetAll = (bigWinner) => {
+    setCredit(500);
     setWinner(false);
     setBigWinner(false);
-    setParticipate(false);
-    setCredit(300);
+    setParticipate(true);
+    if (bigWinner) {
+      setParticipate(false);
+    }
     setDescription({
       item: "",
       title: "",
@@ -184,7 +173,7 @@ function App() {
   return (
     <>
       <BarCredit credit={credit} />
-      {credit == 0 ? <Credit resetAll={resetAll} /> : ""}
+      {credit == 0 ? <Credit resetAll={resetAll} bigWinner={bigWinner} /> : ""}
       <main>
         {/* ::::::BAR:::::: */}
         {open.lose == false ? <BarCredit credit={credit} /> : ""}
@@ -193,13 +182,13 @@ function App() {
             Caza Fortunas
           </h1>
           <article className="flex flex-wrap justify-center sm:grid sm:grid-cols-5 mt-6 ">
-            {item01.map((value, index) => {
+            {square.map((value, index) => {
               return (
                 <Square
-                  winner={winner}
                   key={index}
                   index={index}
                   value={value}
+                  winner={winner}
                   select={selectSquare}
                 />
               );
@@ -210,18 +199,15 @@ function App() {
       {winner && (
         <Modal
           reset={reset}
-          bigWinner={bigWinner}
           resetAll={resetAll}
-          resetSquare={resetSquare}
+          bigWinner={bigWinner}
           description={description}
           participate={participate}
         />
       )}
       {participate && (
         <Participate
-          resetAll={resetAll}
-          reset={resetSquare}
-          setBigWinner={setBigWinner}
+          reset={reset}
           setParticipate={setParticipate}
           resetParticipate={resetParticipate}
         />

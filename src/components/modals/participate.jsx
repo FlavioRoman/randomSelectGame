@@ -12,13 +12,7 @@ const shadowStyleOff = {
                  0 0 1px #4784F1`,
 };
 
-export const Participate = ({
-  reset,
-  setBigWinner,
-  resetParticipate,
-  setParticipate,
-  resetAll,
-}) => {
+export const Participate = ({ resetParticipate, reset }) => {
   return (
     <section className="bg-[#25252590] flex items-center justify-center fixed top-0 left-0 right-0 bottom-0 w-full h-full z-10 p-2">
       {/* <Confetti className="w-full h-full" /> */}
@@ -32,17 +26,14 @@ export const Participate = ({
         <h1 className="text-slate-100 text-center text-[2rem]">100.000</h1>
         <button
           type="button"
-          onClick={() => {
-            setBigWinner(true);
-            resetParticipate();
-          }}
+          onClick={() => resetParticipate()}
           className="border-slate-100 text-slate-100 border-solid border-2 rounded-lg font-semibold block mx-auto mt-4 p-2 transition-all hover:bg-slate-100 hover:text-slate-900"
         >
           Participar
         </button>
         <button
           type="button"
-          onClick={() => resetAll()}
+          onClick={() => reset()}
           className="border-slate-100 text-slate-100 border-solid border-2 rounded-lg font-semibold block mx-auto mt-4 p-2 transition-all hover:bg-slate-100 hover:text-slate-900"
         >
           Cancelar
