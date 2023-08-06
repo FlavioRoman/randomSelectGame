@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
-import { square } from "./utils/data";
+import { square, square_ } from "./utils/data";
 import Confetti from "react-confetti";
 import "./App.css";
 import { Lose } from "./components/modals/lose";
 import { Finish } from "./components/modals/finish";
 import BarCredit from "./components/Bar/barCredit";
 import { useSpring, animated } from "@react-spring/web";
+import { Participate } from "./components/modals/participate";
+import { Credit } from "./components/modals/credit";
 
 const shadowStyleOn = {
   color: "#fff",
@@ -21,7 +23,13 @@ const shadowStyleOff = {
                0 0 1px #4784F1`,
 };
 
-export const Modal = ({ reset, description }) => {
+export const Modal = ({
+  reset,
+  bigWinner,
+  resetSquare,
+  description,
+  resetAll,
+}) => {
   return (
     <section className="bg-[#25252590] flex items-center justify-center fixed top-0 left-0 right-0 bottom-0 w-full h-full z-10 p-2">
       <Confetti className="w-full h-full" />
@@ -30,29 +38,43 @@ export const Modal = ({ reset, description }) => {
         className="bg-[#252525]  flex items-center rounded-lg justify-center flex-col w-[500px] max-w-[500px] h-[300px]"
       >
         <h1 className="text-slate-100 text-center text-[1.5rem]">
-          FELICIDADES HAS GANADO!
+          {description.title}
         </h1>
-        <h2 className="text-center  text-[80px]">{description.img}</h2>
+        <h2 className="text-center  text-[80px]">{description.item}</h2>
         <h2 className="text-center text-slate-100 text-[1.5rem]">
-          {description.name}
+          {description.description}
         </h2>
+        {bigWinner ? (
+          ""
+        ) : (
+          <button
+            type="button"
+            onClick={() => resetSquare()}
+            className="border-slate-100 text-slate-100 border-solid border-2 rounded-lg font-semibold block mx-auto mt-4 p-2 transition-all hover:bg-slate-100 hover:text-slate-900"
+          >
+            Reiniciar
+          </button>
+        )}
+
         <button
           type="button"
-          onClick={() => reset()}
+          onClick={() => resetAll()}
           className="border-slate-100 text-slate-100 border-solid border-2 rounded-lg font-semibold block mx-auto mt-4 p-2 transition-all hover:bg-slate-100 hover:text-slate-900"
         >
-          REINICIAR
+          Finalizar
         </button>
       </article>
     </section>
   );
 };
 
-export const Square = ({ value, index, select }) => {
+export const Square = ({ winner, value, index, select }) => {
+  console.log(winner);
   const springs = useSpring({
     from: { opacity: 0 },
     to: { opacity: 1 },
   });
+
   return (
     <animated.div
       key={index}
@@ -66,107 +88,145 @@ export const Square = ({ value, index, select }) => {
         className="text-[1.2rem]  text-center"
         style={value.show ? shadowStyleOn : shadowStyleOff}
       >
-        BET BAR 360
+        {winner ? value.item : "BET BAR 360"}
       </span>
     </animated.div>
   );
 };
 
 function App() {
-  const [open, setOpen] = useState({
-    lose: false,
-    again: false,
-    winner: false,
-    credit: false,
-    finish: false,
-  });
-  const [hide, setHide] = useState(false);
-  const [item, setItem] = useState(square);
   const [credit, setCredit] = useState(300);
-  const [description, setDescription] = useState({ name: null, img: null });
+  const [winner, setWinner] = useState(false);
+  const [item01, setItem01] = useState(square);
+  const [item02, setItem02] = useState(square_);
+  const [bigWinner, setBigWinner] = useState(false);
+  const [participate, setParticipate] = useState(false);
+  const [description, setDescription] = useState({
+    item: "",
+    title: "",
+    description: "",
+  });
 
-  const select = (index) => {
-    const newArr = [...item];
-    if (
-      newArr[index].item == "🍸" ||
-      newArr[index].item == "🥃" ||
-      newArr[index].item == "🍺"
-    ) {
-      setOpen((state) => ({ ...state, winner: true }));
-      setCredit(300);
-      setDescription({
-        name: newArr[index].text,
-        img: newArr[index].item,
-      });
-      newArr.map((value) => (value.show = false));
-      setItem(newArr);
-      return "";
+  const selectSquare = (index) => {
+    const newArr = bigWinner ? [...item02] : [...item01];
+    if (bigWinner) {
+      if (newArr[index].item == "100.000") {
+        setWinner(true);
+        setDescription((state) => ({
+          ...state,
+          item: newArr[index].item,
+          title: "FELICIDADES HAS GANADO!",
+          description: "",
+        }));
+      } else {
+        setCredit((state) => state - 100);
+      }
     } else {
-      setOpen((state) => ({ ...state, lose: true }));
+      if (
+        newArr[index].item == "🍸" ||
+        newArr[index].item == "🥃" ||
+        newArr[index].item == "🍺"
+      ) {
+        setWinner(true);
+        setDescription((state) => ({
+          ...state,
+          item: newArr[index].item,
+          title: "FELICIDADES HAS GANADO!",
+          description: "",
+        }));
+      } else {
+        setCredit((state) => state - 100);
+      }
     }
-    newArr[index].show = false;
-    setItem(newArr);
-    setHide(check(newArr));
   };
 
-  const check = (arr) => {
-    return arr.some((value) => {
-      return value.show == false;
+  const resetSquare = () => {
+    setWinner(false);
+    setDescription({
+      item: "",
+      title: "",
+      description: "",
+    });
+    setParticipate(true);
+  };
+
+  const resetParticipate = () => {
+    setWinner(false);
+    setParticipate(false);
+    setDescription({
+      item: "",
+      title: "",
+      description: "",
     });
   };
 
   const reset = () => {
-    random();
-    setItem(item);
-    setOpen((state) => ({ ...state, winner: false }));
-    const newArr = [...item];
-    newArr.map((value) => (value.show = true));
-    setItem(newArr);
-    setHide(false);
+    setWinner(false);
+    setDescription({
+      item: "",
+      title: "",
+      description: "",
+    });
   };
 
-  const random = () => {
-    setItem(() => item.sort(() => 0.5 - Math.random()));
-    setHide(true);
+  const resetAll = () => {
+    setWinner(false);
+    setBigWinner(false);
+    setParticipate(false);
+    setCredit(300);
+    setDescription({
+      item: "",
+      title: "",
+      description: "",
+    });
   };
-
-  // ::::::HOOK useEffect::::::
-  useEffect(() => {
-    random();
-    if (credit <= 0) {
-      setOpen((state) => ({ ...state, lose: false, finish: true }));
-    }
-  }, [open.credit, open.lose]);
 
   return (
-    <main>
-      {/* ::::::BAR:::::: */}
-      {open.lose == false ? <BarCredit credit={credit} /> : ""}
-      <section className="pt-16">
-        <h1 className="text-center font-light text-6xl text-white">
-          Caza Fortunas
-        </h1>
-        <article className="flex flex-wrap justify-center sm:grid sm:grid-cols-5 mt-6 ">
-          {item?.map((value, index) => (
-            <Square key={index} index={index} value={value} select={select} />
-          ))}
-        </article>
-      </section>
-      {/* ::::::MODALS:::::: */}
-      {open.lose && (
-        <Lose
-          open={open}
+    <>
+      <BarCredit credit={credit} />
+      {credit == 0 ? <Credit resetAll={resetAll} /> : ""}
+      <main>
+        {/* ::::::BAR:::::: */}
+        {open.lose == false ? <BarCredit credit={credit} /> : ""}
+        <section className="pt-16">
+          <h1 className="text-center font-light text-6xl text-white">
+            Caza Fortunas
+          </h1>
+          <article className="flex flex-wrap justify-center sm:grid sm:grid-cols-5 mt-6 ">
+            {item01.map((value, index) => {
+              return (
+                <Square
+                  winner={winner}
+                  key={index}
+                  index={index}
+                  value={value}
+                  select={selectSquare}
+                />
+              );
+            })}
+          </article>
+        </section>
+      </main>
+      {winner && (
+        <Modal
           reset={reset}
-          credit={credit}
-          setOpen={setOpen}
-          setCredit={setCredit}
+          bigWinner={bigWinner}
+          resetAll={resetAll}
+          resetSquare={resetSquare}
+          description={description}
+          participate={participate}
         />
       )}
-      {open.finish && (
-        <Finish setCredit={setCredit} setOpen={setOpen} reset={reset} />
+      {participate && (
+        <Participate
+          resetAll={resetAll}
+          reset={resetSquare}
+          setBigWinner={setBigWinner}
+          setParticipate={setParticipate}
+          resetParticipate={resetParticipate}
+        />
       )}
-      {open.winner && <Modal reset={reset} description={description} />}
-    </main>
+    </>
   );
 }
 

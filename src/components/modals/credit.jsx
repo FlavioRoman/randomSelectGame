@@ -8,10 +8,7 @@ const shadowStyleOn = {
                  0 0 30px #FF3131`,
 };
 
-export const Credit = ({ setOpen, credit }) => {
-  useEffect(() => {
-    console.log("MI CREDITO: ", credit);
-  }, []);
+export const Credit = ({ credit, resetAll }) => {
   return (
     <motion.section
       initial={{ opacity: 0 }}
@@ -23,14 +20,14 @@ export const Credit = ({ setOpen, credit }) => {
         className="bg-[#252525] flex items-center rounded-lg justify-center flex-col w-[500px] max-w-[500px] h-[350px] "
       >
         <h1 className="text-slate-100 text-center text-[1.5rem]">
-          CREDITO ACTUAL
+          TE HAS QUEDADO SIN CREDITOS
         </h1>
         <h2 className="text-center tracking-widest text-slate-100 text-[2.5rem]">
           {credit}
         </h2>
         <button
           type="button"
-          onClick={() => setOpen((state) => ({ ...state, credit: false }))}
+          onClick={() => resetAll()}
           className="border-slate-100 text-slate-100 w-[150px] border-solid border-2 rounded-lg font-semibold block mx-auto mt-4 p-2 transition-all hover:bg-slate-100 hover:text-slate-900"
         >
           SALIR
