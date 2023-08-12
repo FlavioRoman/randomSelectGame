@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { square, square_ } from "./utils/data";
 import Confetti from "react-confetti";
 import "./App.css";
@@ -60,7 +60,7 @@ export const Square = ({ index, value, select }) => {
       key={index}
       style={{ ...springs }}
       onClick={() => select(index)}
-      className={`${value.class} ${
+      className={`square ${
         value.show ? `bg-neutral-950` : `bg-neutral-950`
       }  border-[#505050] drop-shadow-lg border-solid border-2 rounded-lg cursor-pointer flex justify-center items-center flex-wrap transition-all m-[2px] w-[90px] h-[90px]`}
     >
@@ -118,9 +118,12 @@ function App() {
         }));
       } else {
         setLose(true);
-        for (let i = 0; i < newArr.length; i++) {
-          newArr[i].show = false;
-        }
+        // for (let i = 0; i < newArr.length; i++) {
+        //   newArr[i].show = false;
+        // }
+        setTimeout(() => {
+          console.log("hello");
+        }, 2000);
       }
     }
 
@@ -190,11 +193,11 @@ function App() {
       {bigWinner && <BarCredit credit={credit} />}
       {credit == 0 ? <Credit resetAll={resetAll} bigWinner={bigWinner} /> : ""}
       <main>
-        {/* <div className="lines">
+        <div className="lines">
           <div className="line"></div>
           <div className="line"></div>
           <div className="line"></div>
-        </div> */}
+        </div>
         {/* ::::::BAR:::::: */}
         {open.lose == false ? <BarCredit credit={credit} /> : ""}
         <section className="pt-16">
