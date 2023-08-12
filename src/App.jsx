@@ -112,7 +112,6 @@ function App() {
           setCredit((state) => state - 100);
         }
       }
-      console.log(firstTry);
       firstTry++;
     } else {
       if (
