@@ -88,7 +88,6 @@ function App() {
 
   const selectSquare = (index) => {
     let newArr = bigWinner ? [...square_] : [...square];
-    newArr[index].show = false;
     if (bigWinner) {
       if (newArr[index].item == "100.000") {
         setWinner(true);
@@ -117,11 +116,11 @@ function App() {
           title: "FELICIDADES HAS GANADO!",
           description: "",
         }));
-        for (let i = 0; i < newArr.length; i++) {
-          newArr[i].show = true;
-        }
       } else {
         setLose(true);
+        for (let i = 0; i < newArr.length; i++) {
+          newArr[i].show = false;
+        }
       }
     }
 
@@ -178,6 +177,7 @@ function App() {
     setLose(false);
     setWinner(false);
     setBigWinner(false);
+
     setDescription({
       item: "",
       title: "",
@@ -192,11 +192,11 @@ function App() {
       {bigWinner && <BarCredit credit={credit} />}
       {credit == 0 ? <Credit resetAll={resetAll} bigWinner={bigWinner} /> : ""}
       <main>
-        <div className="lines">
+        {/* <div className="lines">
           <div className="line"></div>
           <div className="line"></div>
           <div className="line"></div>
-        </div>
+        </div> */}
         {/* ::::::BAR:::::: */}
         {open.lose == false ? <BarCredit credit={credit} /> : ""}
         <section className="pt-16">
