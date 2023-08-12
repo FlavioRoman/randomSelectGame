@@ -185,8 +185,6 @@ function App() {
     });
   };
 
-  console.log(winner);
-
   return (
     <>
       {bigWinner && <BarCredit credit={credit} />}
