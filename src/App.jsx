@@ -72,14 +72,16 @@ export const Square = ({ index, value, select }) => {
   );
 };
 
+let firstTry = 1;
+
 function App() {
   const [sq, setSq] = useState();
   const [winner, setWinner] = useState();
   const [lose, setLose] = useState(false);
   const [credit, setCredit] = useState(500);
+  const [loseLote, setLoseLote] = useState(false);
   const [bigWinner, setBigWinner] = useState(false);
   const [participate, setParticipate] = useState(false);
-  const [animation, setAnimation] = useState(true);
   const [description, setDescription] = useState({
     item: "",
     title: "",
@@ -88,7 +90,7 @@ function App() {
 
   const selectSquare = (index) => {
     let newArr = bigWinner ? [...square_] : [...square];
-    setSq(newArr);
+    setSq(newArr.sort(() => 0.5 - Math.random()));
     if (bigWinner) {
       if (newArr[index].item == "100.000") {
         for (let i = 0; i < newArr.length; i++) {
@@ -104,9 +106,14 @@ function App() {
             description: "",
           }));
         }, 1500);
+        firstTry = 1;
       } else {
-        setCredit((state) => state - 100);
+        if (firstTry > 1) {
+          setCredit((state) => state - 100);
+        }
       }
+      console.log(firstTry);
+      firstTry++;
     } else {
       if (
         newArr[index].item == "🍸" ||
@@ -140,8 +147,15 @@ function App() {
     // ::::::REINICIAR LOS SQUARES::::::
     if (credit == 100) {
       for (let i = 0; i < newArr.length; i++) {
-        newArr[i].show = true;
+        newArr[i].show = false;
       }
+      setTimeout(() => {
+        setLoseLote(true);
+        for (let i = 0; i < newArr.length; i++) {
+          newArr[i].show = false;
+        }
+      }, 1500);
+      firstTry = 1;
     }
   };
 
@@ -179,6 +193,7 @@ function App() {
     setCredit(500);
     setLose(false);
     setWinner(false);
+    setLoseLote(false);
     setBigWinner(false);
     setParticipate(true);
     if (bigWinner) {
@@ -195,41 +210,15 @@ function App() {
     setSq(newArr);
   };
 
-  const resetInitial = () => {
-    let newArr = bigWinner ? [...square_] : [...square];
-    setCredit(500);
-    setLose(false);
-    setWinner(false);
-    setBigWinner(false);
-    setDescription({
-      item: "",
-      title: "",
-      description: "",
-    });
-    for (let i = 0; i < newArr.length; i++) {
-      newArr[i].show = true;
-    }
-    setSq(newArr);
-  };
-
   useEffect(() => {
-    setSq(square);
-    setTimeout(() => {
-      setAnimation(false);
-    }, 3000);
-  }, []);
+    setSq(square.sort(() => 0.5 - Math.random()));
+  }, [lose, winner]);
 
   return (
     <>
-      {/* {animation && <Loading />} */}
       {bigWinner && <BarCredit credit={credit} />}
-      {credit == 0 ? <Credit resetAll={resetAll} bigWinner={bigWinner} /> : ""}
+      {loseLote && <Credit resetAll={resetAll} bigWinner={bigWinner} />}
       <main>
-        {/* <div className="lines">
-          <div className="line"></div>
-          <div className="line"></div>
-          <div className="line"></div>
-        </div> */}
         {/* ::::::BAR:::::: */}
         {open.lose == false ? <BarCredit credit={credit} /> : ""}
         <section className="pt-16">
@@ -264,7 +253,7 @@ function App() {
           resetParticipate={resetParticipate}
         />
       )}
-      {lose && <Lose resetAll={resetInitial} />}
+      {lose && <Lose resetAll={resetAll} />}
     </>
   );
 }
