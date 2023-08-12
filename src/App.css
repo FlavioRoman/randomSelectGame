@@ -17,7 +17,11 @@ body {
   justify-content: center;
   /* font-family: "Martian Mono", monospace; */
   font-family: "Belanosima", sans-serif;
-  background-color: #171717;
+  /* background-color: #171717; */
+  background-image: url("./assets/pexels-marlene-leppänen-1426620.jpg");
+  background-size: cover; /* Ajusta la imagen para cubrir todo el contenedor */
+  background-position: center center;
+  background-repeat: no-repeat;
   min-height: 100vh;
   padding: 20px;
 }

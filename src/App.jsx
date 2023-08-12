@@ -11,8 +11,8 @@ import { Lose } from "./components/modals/lose";
 const shadowStyleOn = {
   color: "#fff",
   textShadow: `0 0 7px #fff,
-               0 0 12px #4784F1,
-               0 0 30px #4784F1`,
+               0 0 12px #47f1cc,
+               0 0 30px #47f1cc`,
 };
 
 const shadowStyleOff = {
@@ -62,12 +62,9 @@ export const Square = ({ index, value, select }) => {
       onClick={() => select(index)}
       className={`square ${
         value.show ? `bg-neutral-950` : `bg-neutral-950`
-      }  border-[#505050] drop-shadow-lg border-solid border-2 rounded-lg cursor-pointer flex justify-center items-center flex-wrap transition-all m-[2px] w-[90px] h-[90px]`}
+      } border-[#47f1cc] drop-shadow-lg border-solid  border-l-[3px] border-b-[3px] rounded-lg cursor-pointer flex justify-center items-center flex-wrap transition-all m-[2px] w-[90px] h-[90px]`}
     >
-      <span
-        className="text-[1.2rem] text-center"
-        // style={value.show ? shadowStyleOn : shadowStyleOff}
-      >
+      <span className="text-[1.2rem] text-center" style={shadowStyleOn}>
         {value.show ? "BET BAR 360" : value.item}
       </span>
     </animated.div>
