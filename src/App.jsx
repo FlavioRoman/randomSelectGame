@@ -75,6 +75,7 @@ export const Square = ({ index, value, select }) => {
 };
 
 function App() {
+  const [sq, setSq] = useState();
   const [winner, setWinner] = useState();
   const [lose, setLose] = useState(false);
   const [credit, setCredit] = useState(500);
@@ -88,18 +89,22 @@ function App() {
 
   const selectSquare = (index) => {
     let newArr = bigWinner ? [...square_] : [...square];
+    setSq(newArr);
     if (bigWinner) {
       if (newArr[index].item == "100.000") {
-        setWinner(true);
-        setDescription((state) => ({
-          ...state,
-          item: newArr[index].item,
-          title: "FELICIDADES HAS GANADO!",
-          description: "",
-        }));
         for (let i = 0; i < newArr.length; i++) {
-          newArr[i].show = true;
+          newArr[i].show = false;
         }
+        setSq(newArr);
+        setTimeout(() => {
+          setWinner(true);
+          setDescription((state) => ({
+            ...state,
+            item: newArr[index].item,
+            title: "FELICIDADES HAS GANADO!",
+            description: "",
+          }));
+        }, 1500);
       } else {
         setCredit((state) => state - 100);
       }
@@ -109,21 +114,27 @@ function App() {
         newArr[index].item == "🥃" ||
         newArr[index].item == "🍺"
       ) {
-        setWinner(true);
-        setDescription((state) => ({
-          ...state,
-          item: newArr[index].item,
-          title: "FELICIDADES HAS GANADO!",
-          description: "",
-        }));
-      } else {
-        setLose(true);
-        // for (let i = 0; i < newArr.length; i++) {
-        //   newArr[i].show = false;
-        // }
+        for (let i = 0; i < newArr.length; i++) {
+          newArr[i].show = false;
+        }
+        setSq(newArr);
         setTimeout(() => {
-          console.log("hello");
-        }, 2000);
+          setWinner(true);
+          setDescription((state) => ({
+            ...state,
+            item: newArr[index].item,
+            title: "FELICIDADES HAS GANADO!",
+            description: "",
+          }));
+        }, 1500);
+      } else {
+        for (let i = 0; i < newArr.length; i++) {
+          newArr[i].show = false;
+        }
+        setSq(newArr);
+        setTimeout(() => {
+          setLose(true);
+        }, 1500);
       }
     }
 
@@ -136,6 +147,7 @@ function App() {
   };
 
   const resetParticipate = () => {
+    let newArr = bigWinner ? [...square_] : [...square];
     setCredit(500);
     setWinner(false);
     setBigWinner(true);
@@ -145,6 +157,10 @@ function App() {
       title: "",
       description: "",
     });
+    for (let i = 0; i < newArr.length; i++) {
+      newArr[i].show = true;
+    }
+    setSq(newArr);
   };
 
   const reset = () => {
@@ -160,6 +176,7 @@ function App() {
   };
 
   const resetAll = (bigWinner) => {
+    let newArr = bigWinner ? [...square_] : [...square];
     setCredit(500);
     setLose(false);
     setWinner(false);
@@ -173,20 +190,32 @@ function App() {
       title: "",
       description: "",
     });
+    for (let i = 0; i < newArr.length; i++) {
+      newArr[i].show = true;
+    }
+    setSq(newArr);
   };
 
   const resetInitial = () => {
+    let newArr = bigWinner ? [...square_] : [...square];
     setCredit(500);
     setLose(false);
     setWinner(false);
     setBigWinner(false);
-
     setDescription({
       item: "",
       title: "",
       description: "",
     });
+    for (let i = 0; i < newArr.length; i++) {
+      newArr[i].show = true;
+    }
+    setSq(newArr);
   };
+
+  useEffect(() => {
+    setSq(square);
+  }, []);
 
   return (
     <>
@@ -202,7 +231,7 @@ function App() {
         {open.lose == false ? <BarCredit credit={credit} /> : ""}
         <section className="pt-16">
           <article className="flex flex-wrap justify-center sm:grid sm:grid-cols-5 mt-6 ">
-            {square.map((value, index) => {
+            {sq?.map((value, index) => {
               return (
                 <Square
                   key={index}
