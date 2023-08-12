@@ -7,6 +7,7 @@ import { useSpring, animated } from "@react-spring/web";
 import { Participate } from "./components/modals/participate";
 import { Credit } from "./components/modals/credit";
 import { Lose } from "./components/modals/lose";
+import Loading from "./components/animation/loading";
 
 const shadowStyleOn = {
   color: "#fff",
@@ -78,6 +79,7 @@ function App() {
   const [credit, setCredit] = useState(500);
   const [bigWinner, setBigWinner] = useState(false);
   const [participate, setParticipate] = useState(false);
+  const [animation, setAnimation] = useState(true);
   const [description, setDescription] = useState({
     item: "",
     title: "",
@@ -212,10 +214,14 @@ function App() {
 
   useEffect(() => {
     setSq(square);
+    setTimeout(() => {
+      setAnimation(false);
+    }, 3000);
   }, []);
 
   return (
     <>
+      {/* {animation && <Loading />} */}
       {bigWinner && <BarCredit credit={credit} />}
       {credit == 0 ? <Credit resetAll={resetAll} bigWinner={bigWinner} /> : ""}
       <main>
