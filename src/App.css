@@ -86,7 +86,7 @@ body {
 
 .square {
   color: #fff;
-  animation: squareAnim 1s infinite;
+  /* animation: squareAnim 1s infinite; */
 }
 
 @keyframes squareAnim {
