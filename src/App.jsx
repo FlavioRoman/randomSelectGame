@@ -193,11 +193,11 @@ function App() {
       {bigWinner && <BarCredit credit={credit} />}
       {credit == 0 ? <Credit resetAll={resetAll} bigWinner={bigWinner} /> : ""}
       <main>
-        <div className="lines">
+        {/* <div className="lines">
           <div className="line"></div>
           <div className="line"></div>
           <div className="line"></div>
-        </div>
+        </div> */}
         {/* ::::::BAR:::::: */}
         {open.lose == false ? <BarCredit credit={credit} /> : ""}
         <section className="pt-16">
