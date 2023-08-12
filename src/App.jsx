@@ -6,6 +6,7 @@ import BarCredit from "./components/Bar/barCredit";
 import { useSpring, animated } from "@react-spring/web";
 import { Participate } from "./components/modals/participate";
 import { Credit } from "./components/modals/credit";
+import { Lose } from "./components/modals/lose";
 
 const shadowStyleOn = {
   color: "#fff",
@@ -59,13 +60,13 @@ export const Square = ({ index, value, select }) => {
       key={index}
       style={{ ...springs }}
       onClick={() => select(index)}
-      className={`${
-        value.show ? `bg-neutral-950` : ``
+      className={`${value.class} ${
+        value.show ? `bg-neutral-950` : `bg-neutral-950`
       }  border-[#505050] drop-shadow-lg border-solid border-2 rounded-lg cursor-pointer flex justify-center items-center flex-wrap transition-all m-[2px] w-[90px] h-[90px]`}
     >
       <span
-        className="text-[1.2rem]  text-center"
-        style={value.show ? shadowStyleOn : shadowStyleOff}
+        className="text-[1.2rem] text-center"
+        // style={value.show ? shadowStyleOn : shadowStyleOff}
       >
         {value.show ? "BET BAR 360" : value.item}
       </span>
@@ -74,8 +75,9 @@ export const Square = ({ index, value, select }) => {
 };
 
 function App() {
+  const [winner, setWinner] = useState();
+  const [lose, setLose] = useState(false);
   const [credit, setCredit] = useState(500);
-  const [winner, setWinner] = useState(false);
   const [bigWinner, setBigWinner] = useState(false);
   const [participate, setParticipate] = useState(false);
   const [description, setDescription] = useState({
@@ -119,7 +121,7 @@ function App() {
           newArr[i].show = true;
         }
       } else {
-        setCredit((state) => state - 100);
+        setLose(true);
       }
     }
 
@@ -157,6 +159,7 @@ function App() {
 
   const resetAll = (bigWinner) => {
     setCredit(500);
+    setLose(false);
     setWinner(false);
     setBigWinner(false);
     setParticipate(true);
@@ -170,17 +173,33 @@ function App() {
     });
   };
 
+  const resetInitial = () => {
+    setCredit(500);
+    setLose(false);
+    setWinner(false);
+    setBigWinner(false);
+    setDescription({
+      item: "",
+      title: "",
+      description: "",
+    });
+  };
+
+  console.log(winner);
+
   return (
     <>
-      <BarCredit credit={credit} />
+      {bigWinner && <BarCredit credit={credit} />}
       {credit == 0 ? <Credit resetAll={resetAll} bigWinner={bigWinner} /> : ""}
       <main>
+        <div className="lines">
+          <div className="line"></div>
+          <div className="line"></div>
+          <div className="line"></div>
+        </div>
         {/* ::::::BAR:::::: */}
         {open.lose == false ? <BarCredit credit={credit} /> : ""}
         <section className="pt-16">
-          <h1 className="text-center font-light text-6xl text-white">
-            Caza Fortunas
-          </h1>
           <article className="flex flex-wrap justify-center sm:grid sm:grid-cols-5 mt-6 ">
             {square.map((value, index) => {
               return (
@@ -212,6 +231,7 @@ function App() {
           resetParticipate={resetParticipate}
         />
       )}
+      {lose && <Lose resetAll={resetInitial} />}
     </>
   );
 }
