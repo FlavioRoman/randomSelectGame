@@ -118,7 +118,11 @@ function App() {
           setSq(newArr);
           setTimeout(() => {
             credit == 100 ? setTryAgainShow(true) : setTryAgain(true);
-            setTryAgainShow(false);
+            if (credit != 100) {
+              setTryAgainShow(false);
+            } else {
+              return;
+            }
           }, 1000);
         }
       }
@@ -156,7 +160,7 @@ function App() {
     // ::::::REINICIAR LOS SQUARES::::::
     if (credit == 100) {
       // setTryAgain(false);
-      setTryAgainShow(false);
+      // setTryAgainShow(false);
       for (let i = 0; i < newArr.length; i++) {
         newArr[i].show = false;
       }
