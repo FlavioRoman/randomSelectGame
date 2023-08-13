@@ -8,6 +8,7 @@ import { Participate } from "./components/modals/participate";
 import { Credit } from "./components/modals/credit";
 import { Lose } from "./components/modals/lose";
 import Loading from "./components/animation/loading";
+import { TryAgain } from "./components/modals/tryAgain";
 
 const shadowStyleOn = {
   color: "#fff",
@@ -79,6 +80,8 @@ function App() {
   const [winner, setWinner] = useState();
   const [lose, setLose] = useState(false);
   const [credit, setCredit] = useState(500);
+  const [tryAgain, setTryAgain] = useState(false);
+  const [tryAgainShow, setTryAgainShow] = useState(false);
   const [loseLote, setLoseLote] = useState(false);
   const [bigWinner, setBigWinner] = useState(false);
   const [participate, setParticipate] = useState(false);
@@ -109,7 +112,14 @@ function App() {
         firstTry = 1;
       } else {
         if (firstTry > 1) {
-          setCredit((state) => state - 100);
+          for (let i = 0; i < newArr.length; i++) {
+            newArr[i].show = false;
+          }
+          setSq(newArr);
+          setTimeout(() => {
+            credit == 100 ? "" : setTryAgain(true);
+            setTryAgainShow(false);
+          }, 1000);
         }
       }
       firstTry++;
@@ -145,6 +155,8 @@ function App() {
 
     // ::::::REINICIAR LOS SQUARES::::::
     if (credit == 100) {
+      // setTryAgain(false);
+      setTryAgainShow(false);
       for (let i = 0; i < newArr.length; i++) {
         newArr[i].show = false;
       }
@@ -176,6 +188,7 @@ function App() {
   };
 
   const reset = () => {
+    let newArr = bigWinner ? [...square_] : [...square];
     setCredit(500);
     setWinner(false);
     setBigWinner(false);
@@ -185,6 +198,10 @@ function App() {
       title: "",
       description: "",
     });
+    for (let i = 0; i < newArr.length; i++) {
+      newArr[i].show = true;
+    }
+    setSq(newArr);
   };
 
   const resetAll = (bigWinner) => {
@@ -207,11 +224,19 @@ function App() {
       newArr[i].show = true;
     }
     setSq(newArr);
+    firstTry = 1;
   };
 
   useEffect(() => {
+    let newArr = bigWinner ? [...square_] : [...square];
     setSq(square.sort(() => 0.5 - Math.random()));
-  }, [lose, winner]);
+    if (tryAgainShow) {
+      for (let i = 0; i < newArr.length; i++) {
+        newArr[i].show = true;
+      }
+      setSq(newArr);
+    }
+  }, [lose, winner, tryAgainShow]);
 
   return (
     <>
@@ -238,7 +263,6 @@ function App() {
       </main>
       {winner && (
         <Modal
-          reset={reset}
           resetAll={resetAll}
           bigWinner={bigWinner}
           description={description}
@@ -253,6 +277,14 @@ function App() {
         />
       )}
       {lose && <Lose resetAll={resetAll} />}
+      {tryAgain && (
+        <TryAgain
+          resetAll={reset}
+          setCredit={setCredit}
+          setTryAgain={setTryAgain}
+          setTryAgainShow={setTryAgainShow}
+        />
+      )}
     </>
   );
 }
