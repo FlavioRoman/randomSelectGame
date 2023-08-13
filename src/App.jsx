@@ -108,7 +108,7 @@ function App() {
             title: "FELICIDADES HAS GANADO!",
             description: "",
           }));
-        }, 1500);
+        }, 1000);
         firstTry = 1;
       } else {
         if (firstTry > 1) {
@@ -117,7 +117,7 @@ function App() {
           }
           setSq(newArr);
           setTimeout(() => {
-            credit == 100 ? "" : setTryAgain(true);
+            credit == 100 ? setTryAgainShow(true) : setTryAgain(true);
             setTryAgainShow(false);
           }, 1000);
         }
@@ -141,7 +141,7 @@ function App() {
             title: "FELICIDADES HAS GANADO!",
             description: "",
           }));
-        }, 1500);
+        }, 1000);
       } else {
         for (let i = 0; i < newArr.length; i++) {
           newArr[i].show = false;
@@ -149,7 +149,7 @@ function App() {
         setSq(newArr);
         setTimeout(() => {
           setLose(true);
-        }, 1500);
+        }, 1000);
       }
     }
 
@@ -165,7 +165,7 @@ function App() {
         for (let i = 0; i < newArr.length; i++) {
           newArr[i].show = false;
         }
-      }, 1500);
+      }, 1000);
       firstTry = 1;
     }
   };
